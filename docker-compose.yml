@@ -1,0 +1,29 @@
+services:
+  mongodb:
+    image: mongo:4.4  # <--- Version 4.4 est plus stable pour les VM
+    container_name: mongodb
+    restart: always
+    networks:
+      - pritunl_net
+    volumes:
+      - ./volumes/mongo:/data/db
+
+  pritunl_server:
+    image: jippi/pritunl:latest
+    container_name: pritunl_server
+    restart: always
+    privileged: true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "1194:1194/udp"
+    environment:
+      - PRITUNL_MONGODB_URI=mongodb://mongodb:27017/pritunl
+    depends_on:
+      - mongodb
+    networks:
+      - pritunl_net
+
+networks:
+  pritunl_net:
+    driver: bridge
