@@ -14,13 +14,12 @@ pipeline {
             }
         }
 
-        stage('Clonage') {
+       stage('Clonage') {
             steps {
-                // Remplace par l'URL de ton dépôt si nécessaire
-                git 'https://github.com/FarrelsonFarrelovic/NYOBIA-FARREL-TP1-DOCKER.git'
+                echo 'Clonage de la branche main...'
+                git branch: 'main', url: 'https://github.com/FarrelsonFarrelovic/NYOBIA-FARREL-TP1-DOCKER.git'
             }
         }
-
         stage('Build Image') {
             steps {
                 script {
