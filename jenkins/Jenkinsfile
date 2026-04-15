@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
+        // Nom de l'image Docker (sans le nom d'utilisateur pour l'instant)
         IMAGE_NAME = "nyobia-farrel-flask-app"
-        DOCKER_ID  = "farrelsonfarrelovic"
     }
 
     stages {
@@ -16,28 +16,48 @@ pipeline {
 
         stage('Clonage') {
             steps {
-                git branch: 'main', 
-                    url: 'https://github.com/FarrelsonFarrelovic/NYOBIA-FARREL-TP1-DOCKER.git'
+                // Remplace par l'URL de ton dépôt si nécessaire
+                git 'https://github.com/FarrelsonFarrelovic/NYOBIA-FARREL-TP1-DOCKER.git'
             }
         }
 
         stage('Build Image') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME} .'
+                script {
+                    echo 'Construction de l image Docker...'
+                    // On build l'image localement
+                    sh "docker build -t ${IMAGE_NAME} ."
+                }
             }
         }
 
         stage('Push Docker Hub') {
             steps {
-                // 'DOCKER_PASS' doit être créé dans Jenkins > Credentials
-                withCredentials([string(credentialsId: 'DOCKER_PASS', variable: 'DOCKER_PASS')]) {
-                    sh """
-                        echo $DOCKER_PASS | docker login -u ${DOCKER_ID} --password-stdin
-                        docker tag ${IMAGE_NAME} ${DOCKER_ID}/${IMAGE_NAME}:latest
-                        docker push ${DOCKER_ID}/${IMAGE_NAME}:latest
-                    """
+                script {
+                    // Utilisation des identifiants créés dans Jenkins (ID: DOCKER_PASS)
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        echo 'Connexion à Docker Hub et Push...'
+                        
+                        // Connexion sécurisée
+                        sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USER --password-stdin"
+                        
+                        // On tague l'image avec ton nom d'utilisateur DockerHub
+                        sh "docker tag ${IMAGE_NAME} \$DOCKER_USER/${IMAGE_NAME}:latest"
+                        
+                        // Envoi de l'image
+                        sh "docker push \$DOCKER_USER/${IMAGE_NAME}:latest"
+                    }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline terminé avec succès ! Image publiée.'
+        }
+        failure {
+            echo 'Le pipeline a échoué. Vérifie les logs de la console.'
         }
     }
 }
