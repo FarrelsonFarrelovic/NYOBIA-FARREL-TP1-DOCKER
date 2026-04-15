@@ -1,0 +1,50 @@
+  139  cat app.py
+  140  nano requirements.txt
+  141  nano Dockerfile
+  142  docker build -t farrel-flask-app .
+  143  nano Dockerfile
+  144  cat app.py
+  145  ls ~/farrel-flask-app/
+  146  docker build -t farrel-flask-app .
+  147  cd ~/tp1-docker
+  148  docker build -t farrel-flask-app .
+  149  nano Dockerfile
+  150  docker build -t farrel-flask-app .
+  151  cd ~/farrel-flask-app
+  152  docker build -t farrel-flask-app .
+  153  docker run -d -p 5000:5000 --name farrel-flask farrel-flask-app
+  154  docker ps
+  155  history > historique_commandes.txt
+  156  docker login
+  157  docker tag farrel-flask-app lordfarrel/farrel-flask-app:latest
+  158  docker push lordfarrel/farrel-flask-app:latest
+  159  docker build -t nyobia_ farrel-flask-app .
+  160  docker build -t nyobia- farrel-flask-app .
+  161  docker build -t nyobia farrel-flask-app .
+  162  docker build -t nyobia-flask-app .
+  163  docker push lordfarrel/nyobia-flask-app:latest
+  164  # 1. On crée le "tag" (le lien) entre ton image actuelle et le nom DockerHub
+  165  # Remplace 'farrel-flask-app' par le nom qui apparaît dans ton 'docker images'
+  166  docker tag farrel-flask-app lordfarrel/nyobia-flask-app:latest
+  167  # 2. Maintenant tu peux pousser l'image
+  168  docker push lordfarrel/nyobia-flask-app:latest
+  169  docker run -d -p 5000:5000 --name nyobia-flask farrel-flask-app
+  170  docker run -d -p 5001:5000 --name nyobia-flask farrel-flask-app
+  171  docker rm -f nyobia-flask
+  172  docker run -d -p 5001:5000 --name nyobia-flask farrel-flask-app
+  173  docker ps
+  174  docker build -t nyobia-flask-app .
+  175  history > historique_commandes.txt
+  176  docker login
+  177  docker tag nyobia-flask-app lordfarrel/nyobia-flask-app:latest
+  178  docker push lordfarrel/nyobia-flask-app:latest
+  179  nano app.py
+  180  # On build avec le nom combiné en minuscules
+  181  docker build -t lordfarrel/nyobia-farrel-flask-app:latest .
+  182  # On force la suppression de l'ancien conteneur
+  183  docker rm -f nyobia-flask
+  184  docker run -d -p 5001:5000 --name nyobia-farrel-app lordfarrel/nyobia-farrel-flask-app:latest
+  185  docker push lordfarrel/nyobia-farrel-flask-app:latest
+  186  history > historique_commandes.txt
+  187  docker ps
+  188  history | tail -n 50 > historique_commandes.txt
